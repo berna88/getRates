@@ -1,0 +1,11 @@
+Bundle-Name: getRates
+Bundle-SymbolicName: com.consistent.services.liferay
+Bundle-Version: 1.0.0-SNAPSHOT
+Liferay-Configuration-Path: /configuration
+-metatype: *
+Import-Package: *;resolution:=optional
+Bundle-ClassPath:\
+.,\
+lib/joda-time.jar
+-includeresource:\
+lib/joda-time.jar=joda-time-2.10.2.jar
