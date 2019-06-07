@@ -5,16 +5,16 @@ import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClass
 import aQute.bnd.annotation.metatype.Meta;
 
 
-	@ExtendedObjectClassDefinition(category = "Rates", scope = ExtendedObjectClassDefinition.Scope.SYSTEM)
+	@ExtendedObjectClassDefinition(category = "Posadas", scope = ExtendedObjectClassDefinition.Scope.SYSTEM)
 	@Meta.OCD( localization = "content/Language",id = "com.consistent.services.liferay.interf.ConfigurationRate",name = "Service Rates")
 	public interface ConfigurationRate {
-		@Meta.AD(required = false,description = "Get web content folder id")
+		@Meta.AD(required = false,description = "Get web content folder Hotel id", deflt="0")
 	    public Long folderId();
 	    
-	    @Meta.AD(required = false,description = "Get web content structure hotel id")
+	    @Meta.AD(required = false,description = "Get web content structure hotel id", deflt="0")
 	    public Long structureHotelId();
 	   
-	    @Meta.AD(required = false,description = "Get web content structure rate id")
+	    @Meta.AD(required = false,description = "Get web content structure rate id", deflt="0")
 	    public Long structureRatesId();
 	    
 }
