@@ -276,13 +276,16 @@ private static final Log log = LogFactoryUtil.getLog(RateMapping.class);
 		final AssetEntryQuery assetEntryQuery = new AssetEntryQuery();
 		//Coleccion donde se van a guardar lista de rates
 		final HashSet<RateMapping> rates = new HashSet<RateMapping>();
+		HashSet<AssetEntry> assetEntryList = new HashSet<>();
 		Long categoryId = getCategory(Constants.CODIGODEMARCA);
-		assetEntryQuery.setClassTypeIds(new long[]{Constants.STRUCTURE_RATE_ID} );
-		assetEntryQuery.setGroupIds(new long[]{Constants.SITE_ID} );
-		assetEntryQuery.setAnyCategoryIds(new long[] { categoryId });
-		assetEntryQuery.setClassName("com.liferay.journal.model.JournalArticle");
-		//convirtiendo la lista en hashSet
-		final HashSet<AssetEntry> assetEntryList = new HashSet<AssetEntry>(AssetEntryLocalServiceUtil.getEntries(assetEntryQuery));
+		if(categoryId!=null){
+			assetEntryQuery.setClassTypeIds(new long[]{Constants.STRUCTURE_RATE_ID} );
+			assetEntryQuery.setGroupIds(new long[]{Constants.SITE_ID} );
+			assetEntryQuery.setAnyCategoryIds(new long[] { categoryId });
+			assetEntryQuery.setClassName("com.liferay.journal.model.JournalArticle");
+			//convirtiendo la lista en hashSet
+			assetEntryList = new HashSet<AssetEntry>(AssetEntryLocalServiceUtil.getEntries(assetEntryQuery));
+		}
 		log.info("Tamaño de elemento por categorias: "+assetEntryList.size());
 		RateMapping mapping = new RateMapping();
 		try {
@@ -370,12 +373,16 @@ private static final Log log = LogFactoryUtil.getLog(RateMapping.class);
 		log.info("<---------- Metodo getWebContentRate Con filtros ---------->");
 		AssetEntryQuery assetEntryQuery = new AssetEntryQuery();
 		final HashSet<RateMapping> rates = new HashSet<>();
+		HashSet<AssetEntry> assetEntryList = new HashSet<>();
 		Long categoryId = getCategory(Constants.CODIGODEMARCA);
-		assetEntryQuery.setAnyCategoryIds(new long[] { categoryId });
-		assetEntryQuery.setClassTypeIds(new long[]{Constants.STRUCTURE_RATE_ID} );
-		assetEntryQuery.setGroupIds(new long[]{Constants.SITE_ID} );
-		assetEntryQuery.setClassName("com.liferay.journal.model.JournalArticle");
-		HashSet<AssetEntry> assetEntryList = new HashSet<AssetEntry> (AssetEntryLocalServiceUtil.getEntries(assetEntryQuery));
+		if(categoryId!=null){
+			assetEntryQuery.setClassTypeIds(new long[]{Constants.STRUCTURE_RATE_ID} );
+			assetEntryQuery.setGroupIds(new long[]{Constants.SITE_ID} );
+			assetEntryQuery.setAnyCategoryIds(new long[] { categoryId });
+			assetEntryQuery.setClassName("com.liferay.journal.model.JournalArticle");
+			//convirtiendo la lista en hashSet
+			assetEntryList = new HashSet<AssetEntry>(AssetEntryLocalServiceUtil.getEntries(assetEntryQuery));
+		}
 		log.info("Tamaño de elemento filtrados: "+assetEntryList.size());
 		RateMapping mapping;
 		try {
