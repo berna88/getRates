@@ -266,8 +266,9 @@ private static final Log log = LogFactoryUtil.getLog(RateMapping.class);
 		xMLStreamWriter.flush();
 		xMLStreamWriter.close();
 		String result = stringWriter.getBuffer().toString();
+		String r = result.replace("&nbsp;", "");
 		stringWriter.close(); 
-		return result;
+		return r;
 	}
 	
 	//Metodo que contiene todos los elementos en Rate

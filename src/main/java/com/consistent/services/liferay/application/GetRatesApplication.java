@@ -1,32 +1,26 @@
 package com.consistent.services.liferay.application;
 
+import com.consistent.services.liferay.constants.Constants;
+import com.consistent.services.liferay.interf.SAX;
+import com.consistent.services.liferay.util.Util;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Application;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.xml.stream.XMLStreamException;
 
 import org.osgi.service.component.annotations.Component;
-
-import com.consistent.services.liferay.constants.Constants;
-import com.consistent.services.liferay.interf.Autentification;
-import com.consistent.services.liferay.interf.SAX;
-import com.consistent.services.liferay.segurity.AutentificationImp;
-import com.consistent.services.liferay.util.Util;
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 
 /**
  * @author liferay
@@ -46,9 +40,7 @@ public class GetRatesApplication extends Application {
 	@GET
 	@Path("/getHotelRoomRates")
 	@Produces(MediaType.APPLICATION_XML)
-	public Response getRate(
-			@Context HttpServletRequest request, 
-			@Context HttpHeaders headers,
+	public String getRate(
 			@QueryParam("siteID") String siteID,
 			@QueryParam("brandcode") String brandcode,
 			@QueryParam("language") String languaje,
@@ -72,21 +64,13 @@ public class GetRatesApplication extends Application {
 		//Fechas
 		Constants.CHECKINDATE = checkindate;
 		Constants.CHECKOUTDATE = checkoutdate;
-		
-		final Autentification autentification = new AutentificationImp(request, headers);
-		if(autentification.isAutentificationBasic()){
-			return Response.status(Response.Status.OK).entity(sax.getXML()).build();
-		}else{
-			return Response.status(Response.Status.UNAUTHORIZED).entity("La autenticación no es soportada").build();
-		}
+		return sax.getXML();
 	}
 
 	@GET
 	@Path("/getHotelRoomRatesOptimizado")
 	@Produces(MediaType.APPLICATION_XML)
-	public Response getRatesOptimizado(
-			@Context HttpServletRequest request, 
-			@Context HttpHeaders headers,
+	public String getRatesOptimizado(
 			@QueryParam("siteID") String siteID,
 			@QueryParam("brandcode") String brandcode,
 			@QueryParam("language") String languaje,
@@ -114,14 +98,7 @@ public class GetRatesApplication extends Application {
 		Constants.CHECKINDATE = checkindate;
 		Constants.CHECKOUTDATE = checkoutdate;
 		
-		
-		final Autentification autentification = new AutentificationImp(request, headers);
-		if(autentification.isAutentificationBasic()){
-			log.info("<-------- Proceso Porcesando XML --------->");
-			return Response.status(Response.Status.OK).entity(sax.getXML()).build();
-		}else{
-			return Response.status(Response.Status.UNAUTHORIZED).entity("La autenticación no es soportada").build();
-		}
+		return sax.getXML();
 	}
 
 }
