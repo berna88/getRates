@@ -30,12 +30,12 @@ public abstract class Portal {
 		} catch (Exception e) {
 			log.error("Error en metodo getVocabularyId: "+ e.getMessage());
 		}
-		log.info("VocabularyId: "+vocabularyId);
+		//log.info("VocabularyId: "+vocabularyId);
 		return vocabularyId;
 	}
 	
 	protected Long getCategory(String marca){
-		log.info("<---------- Metodo getCategory ---------->");
+		//log.info("<---------- Metodo getCategory ---------->");
 		Long vocabularyId = getVocabularyId();
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(AssetCategory.class, "category", PortalClassLoaderUtil.getClassLoader());
 		dynamicQuery.add(PropertyFactoryUtil.forName("vocabularyId").eq(vocabularyId));
@@ -52,7 +52,7 @@ public abstract class Portal {
 			// TODO: handle exception
 			log.error("null: "+e);
 		}
-		log.info("Categoria Id: "+ categoryId);
+		//log.info("Categoria Id: "+ categoryId);
 		return categoryId;
 	}
 	

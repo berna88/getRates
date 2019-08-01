@@ -156,6 +156,7 @@ private static final Log log = LogFactoryUtil.getLog(RateMapping.class);
 		this.restrictions = "";
 		this.enddate = "";
 		this.currency = "";
+		//this.mediaLinks = new ArrayList<String>();
 	}
 	//Constructor con parametros
 	public RateMapping(String guid, String code, String name, String title, String language, String keyword,
@@ -227,46 +228,51 @@ private static final Log log = LogFactoryUtil.getLog(RateMapping.class);
 				xMLStreamWriter.writeEndElement();
 				/*mediaLink section*/
 		         JSONArray ArrayMediaLinks = JSONFactoryUtil.createJSONArray();
-		         List<String> MeliaLinkList = mediaLinks;
-					for (String mediaLinkItem : MeliaLinkList) {
-						JSONObject myObject;
-						try {
-							
-							myObject = JSONFactoryUtil.createJSONObject(mediaLinkItem);
-							ArrayMediaLinks.put(myObject);
-						} catch (JSONException e) {
-							log.error("Error converter json"+e);
-						}
-						
-					}
-					xMLStreamWriter.writeStartElement("medialinks");		   
-			         xMLStreamWriter.writeStartElement("medialink");
+		
+		        	 
+			         List<String> MeliaLinkList = mediaLinks;
 			         
-					   xMLStreamWriter.writeStartElement("keyword");
-					   xMLStreamWriter.writeEndElement();
-					         for (int i = 0; i < ArrayMediaLinks.length(); i++) {
-									JSONObject jsonobject = ArrayMediaLinks.getJSONObject(i);
-								    String link = jsonobject.getString("link");
-								    String type_image = jsonobject.getString("type_image");
-									xMLStreamWriter.writeStartElement("multimedia");
-						            xMLStreamWriter.writeAttribute("type",type_image);
-							        xMLStreamWriter.writeStartElement("url");
-							        xMLStreamWriter.writeCharacters(link);
-							        xMLStreamWriter.writeEndElement();
-						            xMLStreamWriter.writeEndElement();
-								}
-					         xMLStreamWriter.writeStartElement("thumbnail");
-					         xMLStreamWriter.writeEndElement();
-					         xMLStreamWriter.writeStartElement("type");
-					         xMLStreamWriter.writeEndElement();
-				      xMLStreamWriter.writeEndElement();
-		         xMLStreamWriter.writeEndElement();
-		          //mediaLink section
-			xMLStreamWriter.writeEndElement();
+						for (String mediaLinkItem : MeliaLinkList) {
+							JSONObject myObject;
+							try {
+								
+								myObject = JSONFactoryUtil.createJSONObject(mediaLinkItem);
+								ArrayMediaLinks.put(myObject);
+							} catch (JSONException e) {
+								log.error("Error converter json"+e);
+							}
+							
+						}
+						xMLStreamWriter.writeStartElement("medialinks");		   
+				         xMLStreamWriter.writeStartElement("medialink");
+				         
+						   xMLStreamWriter.writeStartElement("keyword");
+						   xMLStreamWriter.writeEndElement();
+						         for (int i = 0; i < ArrayMediaLinks.length(); i++) {
+										JSONObject jsonobject = ArrayMediaLinks.getJSONObject(i);
+									    String link = jsonobject.getString("link");
+									    String type_image = jsonobject.getString("type_image");
+										xMLStreamWriter.writeStartElement("multimedia");
+							            xMLStreamWriter.writeAttribute("type",type_image);
+								        xMLStreamWriter.writeStartElement("url");
+								        xMLStreamWriter.writeCharacters(link);
+								        xMLStreamWriter.writeEndElement();
+							            xMLStreamWriter.writeEndElement();
+									}
+						         xMLStreamWriter.writeStartElement("thumbnail");
+						         xMLStreamWriter.writeEndElement();
+						         xMLStreamWriter.writeStartElement("type");
+						         xMLStreamWriter.writeEndElement();
+					      xMLStreamWriter.writeEndElement();
+			         xMLStreamWriter.writeEndElement();
+			          //mediaLink section
+		
+		         
+		         		xMLStreamWriter.writeEndElement();
 		xMLStreamWriter.flush();
 		xMLStreamWriter.close();
 		String result = stringWriter.getBuffer().toString();
-		result = result.replaceAll("&nbsp;", "");
+		//result = result.replaceAll("&nbsp;", "");
 		stringWriter.close(); 
 		return result;
 	}

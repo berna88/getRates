@@ -440,7 +440,7 @@ private static final Log log = LogFactoryUtil.getLog(HotelMapping.class);
 	         xMLStreamWriter.close();
 
 	         String xmlString = stringWriter.getBuffer().toString();
-	         xmlString = xmlString.replaceAll("&nbsp;", "");
+	         //xmlString = xmlString.replaceAll("&nbsp;", "");
 	      
 	         stringWriter.close();
 	        xmlString=xmlString.replaceAll("\\<\\?xml(.+?)\\?\\>", "").trim();

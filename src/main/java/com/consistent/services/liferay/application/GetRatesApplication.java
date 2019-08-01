@@ -64,7 +64,9 @@ public class GetRatesApplication extends Application {
 		//Fechas
 		Constants.CHECKINDATE = checkindate;
 		Constants.CHECKOUTDATE = checkoutdate;
-		return sax.getXML();
+		String result = sax.getXML().toString();
+		result = result.replace("&nbsp;", "");
+		return result;
 	}
 
 	@GET
@@ -97,8 +99,10 @@ public class GetRatesApplication extends Application {
 		//Fechas
 		Constants.CHECKINDATE = checkindate;
 		Constants.CHECKOUTDATE = checkoutdate;
-		
-		return sax.getXML();
+		//log.info("+++++"+sax.getXML().concat("++++++++"));
+		String result = sax.getXML().toString();
+		result = result.replace("&nbsp;", "");
+		return result;
 	}
 
 }
