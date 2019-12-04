@@ -156,7 +156,7 @@ private static final Log log = LogFactoryUtil.getLog(RateMapping.class);
 		this.restrictions = "";
 		this.enddate = "";
 		this.currency = "";
-		//this.mediaLinks = new ArrayList<String>();
+		this.mediaLinks = new ArrayList<String>();
 	}
 	//Constructor con parametros
 	public RateMapping(String guid, String code, String name, String title, String language, String keyword,
@@ -272,7 +272,6 @@ private static final Log log = LogFactoryUtil.getLog(RateMapping.class);
 		xMLStreamWriter.flush();
 		xMLStreamWriter.close();
 		String result = stringWriter.getBuffer().toString();
-		//result = result.replaceAll("&nbsp;", "");
 		stringWriter.close(); 
 		return result;
 	}

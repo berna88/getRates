@@ -272,7 +272,7 @@ private static final Log log = LogFactoryUtil.getLog(RoomMapping.class);
      xMLStreamWriter.close();
 
     String xmlString = stringWriter.getBuffer().toString();
-    xmlString=xmlString.replaceAll("\\<\\?xml(.+?)\\?\\>", "").trim();
+    //xmlString=xmlString.replaceAll("\\<\\?xml(.+?)\\?\\>", "").trim();
     //xmlString = xmlString.replaceAll("&nbsp;", "");
     return xmlString;
 
