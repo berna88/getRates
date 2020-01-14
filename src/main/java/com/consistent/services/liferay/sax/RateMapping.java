@@ -395,7 +395,7 @@ private static final Log log = LogFactoryUtil.getLog(RateMapping.class);
 			for (AssetEntry ae : assetEntryList) {
 			    //JournalArticleResource journalArticleResource = JournalArticleResourceLocalServiceUtil.getJournalArticleResource(ae.getClassPK());
 			    //JournalArticle journalArticle = JournalArticleLocalServiceUtil.getLatestArticle(journalArticleResource.getResourcePrimKey());
-			    JournalArticle journalArticle = JournalArticleLocalServiceUtil.getLatestArticle(ae.getClassPK());
+			    final JournalArticle journalArticle = JournalArticleLocalServiceUtil.getLatestArticle(ae.getClassPK());
 			    
 			    		for(int i = 0; i < codesSplit.length;i++)
 						{
