@@ -7,7 +7,10 @@ import com.liferay.asset.kernel.model.AssetCategory;
 import com.liferay.asset.kernel.model.AssetVocabulary;
 import com.liferay.asset.kernel.service.AssetCategoryLocalServiceUtil;
 import com.liferay.asset.kernel.service.AssetVocabularyLocalServiceUtil;
+import com.liferay.journal.model.JournalFolder;
 import com.liferay.journal.service.JournalArticleResourceLocalServiceUtil;
+import com.liferay.journal.service.JournalFolderLocalServiceUtil;
+import com.liferay.journal.service.impl.JournalFolderLocalServiceImpl;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
@@ -60,7 +63,19 @@ public abstract class Portal {
         DynamicQuery queryJournalFolder = DynamicQueryFactoryUtil.forClass(com.liferay.journal.model.impl.JournalFolderImpl.class, "journalFolder",PortalClassLoaderUtil.getClassLoader());
         queryJournalFolder.add(RestrictionsFactoryUtil.eq("name", nameFolder));
         queryJournalFolder.add( RestrictionsFactoryUtil.eq("groupId",new Long(Constants.SITE_ID)));
-        List<com.liferay.journal.model.impl.JournalFolderImpl> journalfolderResults = JournalArticleResourceLocalServiceUtil.dynamicQuery(queryJournalFolder);
+        List<com.liferay.journal.model.impl.JournalFolderImpl> journalfolderResults = JournalFolderLocalServiceUtil.dynamicQuery(queryJournalFolder);
+        log.info("Tamaño: "+journalfolderResults.size());
+        log.info("getFolderId: "+journalfolderResults.get(0).getFolderId());
+        return journalfolderResults.get(0).getFolderId();
+    }
+	
+	protected Long getFolderFilter(String nameFolder){
+        DynamicQuery queryJournalFolder = DynamicQueryFactoryUtil.forClass(com.liferay.journal.model.impl.JournalFolderImpl.class, "journalFolder",PortalClassLoaderUtil.getClassLoader());
+        queryJournalFolder.add(RestrictionsFactoryUtil.eq("name", nameFolder));
+        queryJournalFolder.add( RestrictionsFactoryUtil.eq("groupId",new Long(Constants.SITE_ID)));
+        queryJournalFolder.add( RestrictionsFactoryUtil.eq("parentFolderId",getFolderId(Constants.CODIGODEMARCA)));
+        List<com.liferay.journal.model.impl.JournalFolderImpl> journalfolderResults = JournalFolderLocalServiceUtil.dynamicQuery(queryJournalFolder);
+        log.info("Tamaño: "+journalfolderResults.size());
         log.info("getFolderId: "+journalfolderResults.get(0).getFolderId());
         return journalfolderResults.get(0).getFolderId();
     }

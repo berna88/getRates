@@ -235,13 +235,12 @@ private static final Log log = LogFactoryUtil.getLog(HotelMapping.class);
 				JournalFolder folder = JournalFolderLocalServiceUtil.fetchFolder(Constants.SITE_ID, Constants.FOLDER_ID, Constants.CODIGODEMARCA);
 				long folderId = folder.getFolderId();
 				log.info("Folder id: "+folderId);
-				
 				if(!Constants.CODIGODEHOTEL.isEmpty()){
 					log.info("Entro al filtrado");
 					DynamicQuery dynamicQueryJournal = DynamicQueryFactoryUtil.forClass(JournalArticleImpl.class, "folder", PortalClassLoaderUtil.getClassLoader());
 					dynamicQueryJournal.add(PropertyFactoryUtil.forName("DDMStructureKey").eq(results.getStructureKey()));
 					dynamicQueryJournal.add(PropertyFactoryUtil.forName("groupId").eq(new Long(Constants.SITE_ID)));
-					dynamicQueryJournal.add(PropertyFactoryUtil.forName("folderId").eq(getFolderId(Constants.CODIGODEHOTEL)));
+					dynamicQueryJournal.add(PropertyFactoryUtil.forName("folderId").eq(getFolderFilter(Constants.CODIGODEHOTEL)));
 					final HashSet<JournalArticle> journalArticles = new HashSet<JournalArticle>(JournalArticleLocalServiceUtil.dynamicQuery(dynamicQueryJournal));
 					for (JournalArticle journal : journalArticles) {
 						if(!journal.isInTrash()){
