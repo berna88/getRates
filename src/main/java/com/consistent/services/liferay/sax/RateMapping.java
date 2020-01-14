@@ -35,7 +35,7 @@ import com.liferay.portal.kernel.xml.SAXReaderUtil;
 public class RateMapping extends Portal implements Mapping {
 	
 private static final Log log = LogFactoryUtil.getLog(RateMapping.class);
-	
+	 
 	private String guid;
 	private String code;
 	private String name;
