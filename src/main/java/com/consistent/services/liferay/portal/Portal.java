@@ -7,7 +7,10 @@ import com.liferay.asset.kernel.model.AssetCategory;
 import com.liferay.asset.kernel.model.AssetVocabulary;
 import com.liferay.asset.kernel.service.AssetCategoryLocalServiceUtil;
 import com.liferay.asset.kernel.service.AssetVocabularyLocalServiceUtil;
+import com.liferay.journal.model.JournalFolder;
+import com.liferay.journal.model.impl.JournalFolderImpl;
 import com.liferay.journal.service.JournalArticleResourceLocalServiceUtil;
+import com.liferay.journal.service.JournalFolderLocalServiceUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
@@ -57,12 +60,22 @@ public abstract class Portal {
 	}
 	
 	protected Long getFolderId(String nameFolder){
+		Long folderId = null;
         DynamicQuery queryJournalFolder = DynamicQueryFactoryUtil.forClass(com.liferay.journal.model.impl.JournalFolderImpl.class, "journalFolder",PortalClassLoaderUtil.getClassLoader());
         queryJournalFolder.add(RestrictionsFactoryUtil.eq("name", nameFolder));
         queryJournalFolder.add( RestrictionsFactoryUtil.eq("groupId",new Long(Constants.SITE_ID)));
-        List<com.liferay.journal.model.impl.JournalFolderImpl> journalfolderResults = JournalArticleResourceLocalServiceUtil.dynamicQuery(queryJournalFolder);
+        final List<com.liferay.journal.model.impl.JournalFolderImpl> journalfolderResults = JournalFolderLocalServiceUtil.dynamicQuery(queryJournalFolder);
+        if(journalfolderResults.size()>1) {
+        	for (JournalFolderImpl journalFolderImpl : journalfolderResults) {
+				if (journalFolderImpl.getTreePath().split("/").length >= 5) {
+					folderId = journalFolderImpl.getFolderId();
+				}
+			}
+        }else {
+        	folderId = journalfolderResults.get(0).getFolderId();
+        }
         log.info("getFolderId: "+journalfolderResults.get(0).getFolderId());
-        return journalfolderResults.get(0).getFolderId();
+        return folderId;
     }
 	
 }
