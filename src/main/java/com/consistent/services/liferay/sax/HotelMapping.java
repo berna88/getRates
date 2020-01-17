@@ -231,11 +231,15 @@ private static final Log log = LogFactoryUtil.getLog(HotelMapping.class);
 				//Obtiene el Id de la estructura
 			    DDMStructure results = DDMStructureLocalServiceUtil.getStructure(Constants.STRUCTURE_HOTEL_ID);
 				log.info("Estructura: "+results.getStructureKey());
-				//Obtiene el Id de la carpeta 
-				JournalFolder folder = JournalFolderLocalServiceUtil.fetchFolder(Constants.SITE_ID, Constants.FOLDER_ID, Constants.CODIGODEMARCA);
-				long folderId = folder.getFolderId();
-				log.info("Folder id: "+folderId);
+				//Obtiene el Id de la carpeta
+				long folderId = 0;
+				if(Constants.CODIGODEMARCA != null && !Constants.CODIGODEMARCA.isEmpty()) {
+					JournalFolder folder = JournalFolderLocalServiceUtil.fetchFolder(Constants.SITE_ID, Constants.FOLDER_ID, Constants.CODIGODEMARCA);
+					folderId = folder.getFolderId();
+					log.info("Folder id: "+folderId);
+				}
 				
+				log.info("El codigo de hotel: "+Constants.CODIGODEHOTEL);
 				if(!Constants.CODIGODEHOTEL.isEmpty()){
 					log.info("Entro al filtrado");
 					DynamicQuery dynamicQueryJournal = DynamicQueryFactoryUtil.forClass(JournalArticleImpl.class, "folder", PortalClassLoaderUtil.getClassLoader());

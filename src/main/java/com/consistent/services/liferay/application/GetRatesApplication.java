@@ -16,8 +16,10 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.xml.stream.XMLStreamException;
 
 import org.osgi.service.component.annotations.Component;
@@ -51,22 +53,38 @@ public class GetRatesApplication extends Application {
 			@QueryParam("checkoutdate") String checkoutdate) throws PortalException, IOException, XMLStreamException {
 		log.info("<-------- Metodo getRateList Normal getHotelRoomRates--------->");
 		// Estableciendo el siteId del sitio
-		Constants.SITE_ID = Long.parseLong(siteID);
-		// Estableciendo la marca
-		Constants.CODIGODEMARCA = brandcode;
-		// Estableciendo el lenguaje
-		Constants.LENGUAJE = languaje;
-		log.info("language select: "+Constants.LENGUAJE);
-		// Codigo del hotel
-		Constants.CODIGODEHOTEL = hotelcode;
-		//Estableciendo canal
-		Constants.CHANNEL = channel;
-		//Fechas
-		Constants.CHECKINDATE = checkindate;
-		Constants.CHECKOUTDATE = checkoutdate;
-		String result = sax.getXML().toString();
-		result = result.replace("&nbsp;", "");
-		return result;
+		if(null == siteID) {
+			throw new WebApplicationException(Response.Status.NO_CONTENT);
+		}else if(siteID.isEmpty()) {
+			throw new WebApplicationException(Response.Status.NO_CONTENT);
+		}
+		if(null == brandcode) {
+			throw new WebApplicationException(Response.Status.NO_CONTENT);
+		}else if(brandcode.isEmpty()){
+			throw new WebApplicationException(Response.Status.NO_CONTENT);
+		}else{
+			Constants.SITE_ID = Long.parseLong(siteID);
+			// Estableciendo la marca
+			Constants.CODIGODEMARCA = brandcode;
+			// Estableciendo el lenguaje
+			Constants.LENGUAJE = languaje;
+			log.info("language select: "+Constants.LENGUAJE);
+			// Codigo del hotel
+			if(null == hotelcode) {
+				Constants.CODIGODEHOTEL = "";
+			}else {
+				Constants.CODIGODEHOTEL = hotelcode;
+			}
+			//Estableciendo canal
+			Constants.CHANNEL = channel;
+			//Fechas
+			Constants.CHECKINDATE = checkindate;
+			Constants.CHECKOUTDATE = checkoutdate;
+			String result = sax.getXML().toString();
+			result = result.replace("&nbsp;", "");
+			return result;
+		}
+		
 	}
 
 	@GET
@@ -83,26 +101,43 @@ public class GetRatesApplication extends Application {
 			@QueryParam("checkoutdate") String checkoutdate,
 			@QueryParam("contractcodes") String contractcodes) throws PortalException, IOException, XMLStreamException {
 		log.info("<-------- Metodo getRateList Optimizado --------->");	
-		// Estableciendo el siteId del sitio
-		Constants.SITE_ID = Long.parseLong(siteID);
+		
+		if(null == siteID) {
+			throw new WebApplicationException(Response.Status.NO_CONTENT);
+		}else if(siteID.isEmpty()) {
+			throw new WebApplicationException(Response.Status.NO_CONTENT);
+		}
 		// Estableciendo la marca
-		Constants.CODIGODEMARCA = brandcode;
-		// Estableciendo el lenguaje
-		Constants.LENGUAJE = languaje;
-		log.info("language select: "+Constants.LENGUAJE);
-		// Estrableciendo contractcodes
-		Constants.validContractCodes(contractcodes);
-		// Codigo del hotel
-		Constants.CODIGODEHOTEL = hotelcode;
-		//Estableciendo canal
-		Constants.CHANNEL = channel;
-		//Fechas
-		Constants.CHECKINDATE = checkindate;
-		Constants.CHECKOUTDATE = checkoutdate;
-		//log.info("+++++"+sax.getXML().concat("++++++++"));
-		String result = sax.getXML().toString();
-		result = result.replace("&nbsp;", "");
-		return result;
+		if(null == brandcode) {
+			throw new WebApplicationException(Response.Status.NO_CONTENT);
+		}else if(brandcode.isEmpty()){
+			throw new WebApplicationException(Response.Status.NO_CONTENT);
+		}else{
+			// Estableciendo el siteId del sitio
+						Constants.SITE_ID = Long.parseLong(siteID);
+						Constants.CODIGODEMARCA = brandcode;
+						// Estableciendo el lenguaje
+						Constants.LENGUAJE = languaje;
+						log.info("language select: "+Constants.LENGUAJE);
+						// Estrableciendo contractcodes
+						Constants.validContractCodes(contractcodes);
+						// Codigo del hotel
+						if(null == hotelcode) {
+							Constants.CODIGODEHOTEL = "";
+						}else {
+							Constants.CODIGODEHOTEL = hotelcode;
+						}
+						//Estableciendo canal
+						Constants.CHANNEL = channel;
+						//Fechas
+						Constants.CHECKINDATE = checkindate;
+						Constants.CHECKOUTDATE = checkoutdate;
+						//log.info("+++++"+sax.getXML().concat("++++++++"));
+						String result = sax.getXML().toString();
+						result = result.replace("&nbsp;", "");
+						return result;
+		}
+		
 	}
 
 }
