@@ -1,6 +1,6 @@
 Bundle-Name: getRates
 Bundle-SymbolicName: com.consistent.services.liferay
-Bundle-Version: 1.0.0-SNAPSHOT
+Bundle-Version: 2.2.1-SNAPSHOT
 Liferay-Configuration-Path: /configuration
 -metatype: *
 Import-Package: *;resolution:=optional
