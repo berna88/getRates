@@ -505,20 +505,20 @@ private static final Log log = LogFactoryUtil.getLog(HotelMapping.class);
 		Document docXML=null;
 	        try {
 	        	
-				docXML = SAXReaderUtil.read(content.getContentByLocale(locale));
+				docXML = SAXReaderUtil.read(content.getContent());
 				hotelMapping = new HotelMapping();
 				hotelMapping.articleId = content.getArticleId();
 				hotelMapping.title =content.getTitle(locale);
-				hotelMapping.keyword = docXML.valueOf("//dynamic-element[@name='keywordsHotel']/dynamic-content/text()");
-				hotelMapping.hotelCode= docXML.valueOf("//dynamic-element[@name='codeHotel']/dynamic-content/text()");
-				hotelMapping.name =docXML.valueOf("//dynamic-element[@name='nameHotel']/dynamic-content/text()");
-				hotelMapping.description=docXML.valueOf("//dynamic-element[@name='descriptionHotel']/dynamic-content/text()");
-				hotelMapping.shortDescription=docXML.valueOf("//dynamic-element[@name='shortDescriptionHotel']/dynamic-content/text()");
+				hotelMapping.keyword = docXML.valueOf("//dynamic-element[@name='keywordsHotel']/dynamic-content[@language-id='"+locale+"']/text()");
+				hotelMapping.hotelCode= docXML.valueOf("//dynamic-element[@name='codeHotel']/dynamic-content[@language-id='"+locale+"']/text()");
+				hotelMapping.name =docXML.valueOf("//dynamic-element[@name='nameHotel']/dynamic-content[@language-id='"+locale+"']/text()");
+				hotelMapping.description=docXML.valueOf("//dynamic-element[@name='descriptionHotel']/dynamic-content[@language-id='"+locale+"']/text()");
+				hotelMapping.shortDescription=docXML.valueOf("//dynamic-element[@name='shortDescriptionHotel']/dynamic-content[@language-id='"+locale+"']/text()");
 				List<Node> addressNodes = docXML.selectNodes("//dynamic-element[@name='addressHotel']/dynamic-element");
 				
 				for(Node addressNode : addressNodes){
 					String nombre= addressNode.valueOf("@name");
-					String valor= addressNode.valueOf("dynamic-content/text()");
+					String valor= addressNode.valueOf("dynamic-content[@language-id='"+locale+"']/text()");
 					if(nombre.equals("addressDetailHotel")){
 						hotelMapping.address=valor;
 					}
@@ -551,7 +551,7 @@ private static final Log log = LogFactoryUtil.getLog(HotelMapping.class);
 				List<Node> telefonoNodes = docXML.selectNodes("//dynamic-element[@name='telephoneHotel']/dynamic-element");		
 				List<String> telefonosArray=new ArrayList<String>();
 				for(Node telefonoNode : telefonoNodes){				
-					String valor= telefonoNode.valueOf("dynamic-content/text()");
+					String valor= telefonoNode.valueOf("dynamic-content[@language-id='"+locale+"']/text()");
 					if(!valor.trim().equals("")){					
 						telefonosArray.add(valor);
 					}			
@@ -562,7 +562,7 @@ private static final Log log = LogFactoryUtil.getLog(HotelMapping.class);
 				List<Node> alternativeHotels = docXML.selectNodes("//dynamic-element[@name='hotelesAlternos']/dynamic-element");		
 				List<String> alternativeHotelsArray=new ArrayList<String>();
 				for(Node alternativeHotel : alternativeHotels){				
-					String valor= alternativeHotel.valueOf("dynamic-content");
+					String valor= alternativeHotel.valueOf("dynamic-content[@language-id='"+locale+"']");
 					if(!valor.trim().equals("") && !valor.trim().equals("{}")){
 						alternativeHotelsArray.add(valor);
 					}
@@ -572,9 +572,9 @@ private static final Log log = LogFactoryUtil.getLog(HotelMapping.class);
 				List<Node> mediaNodes = docXML.selectNodes("//dynamic-element[@name='mediaLinksHotel']/dynamic-element");
 				List<String> mediaArray=new ArrayList<String>();
 				for(Node mediaNode : mediaNodes){				
-					String pie= mediaNode.valueOf("dynamic-element[@name='Pie']/dynamic-content/text()");				
-					String link= mediaNode.valueOf("dynamic-content/text()");				
-					String type_image= mediaNode.valueOf("dynamic-element[@name='typeHotel']/dynamic-content/text()");						
+					String pie= mediaNode.valueOf("dynamic-element[@name='Pie']/dynamic-content[@language-id='"+locale+"']/text()");				
+					String link= mediaNode.valueOf("dynamic-content[@language-id='"+locale+"']/text()");				
+					String type_image= mediaNode.valueOf("dynamic-element[@name='typeHotel']/dynamic-content[@language-id='"+locale+"']/text()");						
 					if(!link.trim().equals("")){
 						JSONObject object=JSONFactoryUtil.createJSONObject();
 						object.put("link", link);
@@ -591,7 +591,7 @@ private static final Log log = LogFactoryUtil.getLog(HotelMapping.class);
 				List<Node> roomLinkNodes = docXML.selectNodes("//dynamic-element[@name='roomLinksHotel']/dynamic-element");		
 				List<String> roomsArray=new ArrayList<String>();
 				for(Node roomLinkNode : roomLinkNodes){				
-					String valor= roomLinkNode.valueOf("dynamic-content/text()");
+					String valor= roomLinkNode.valueOf("dynamic-content[@language-id='"+locale+"']/text()");
 					if(!valor.trim().equals("")){
 						JSONObject object=null;
 						try {

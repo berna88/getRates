@@ -290,11 +290,16 @@ private static final Log log = LogFactoryUtil.getLog(RateMapping.class);
 			assetEntryQuery.setAnyCategoryIds(new long[] { categoryId });
 			assetEntryQuery.setClassName("com.liferay.journal.model.JournalArticle");
 			//convirtiendo la lista en hashSet
+			long start = System.currentTimeMillis();
 			assetEntryList = new HashSet<AssetEntry>(AssetEntryLocalServiceUtil.getEntries(assetEntryQuery));
+			long end = System.currentTimeMillis();
+			System.out.println("Termino de Consulta: "+ ((end - start) / 1000));
 		}
 		log.info("Tamaño de elemento por categorias: "+assetEntryList.size());
 		RateMapping mapping = new RateMapping();
+		
 		try {
+			long start = System.currentTimeMillis();
 			for (AssetEntry ae : assetEntryList) {
 				// JournalArticleResource journalArticleResource = JournalArticleResourceLocalServiceUtil.getJournalArticleResource(ae.getClassPK());
 			    // JournalArticle journalArticle = JournalArticleLocalServiceUtil.getLatestArticle(journalArticleResource.getResourcePrimKey());
@@ -302,29 +307,29 @@ private static final Log log = LogFactoryUtil.getLog(RateMapping.class);
 								
 								Document document = null;
 								
-								document = SAXReaderUtil.read(journalArticle.getContentByLocale(locale));
+								document = SAXReaderUtil.read(journalArticle.getContent());
 									
 									if(!Constants.CHECKINDATE.isEmpty()){
 										if(getIntervals(Constants.CHECKINDATE, Constants.CHECKOUTDATE, document.valueOf("//dynamic-element[@name='finalDateBooking']/dynamic-content/text()"))){
 											mapping = new RateMapping(); 
-											mapping.code = document.valueOf("//dynamic-element[@name='codeRate']/dynamic-content/text()");
-											mapping.name = document.valueOf("//dynamic-element[@name='nameRate']/dynamic-content/text()");
+											mapping.code = document.valueOf("//dynamic-element[@name='codeRate']/dynamic-content[@language-id='"+locale+"']/text()");
+											mapping.name = document.valueOf("//dynamic-element[@name='nameRate']/dynamic-content[@language-id='"+locale+"']/text()");
 											mapping.title = document.valueOf("//dynamic-element[@name='codeRate']/dynamic-content/text()").concat("-").concat(document.valueOf("//dynamic-element[@name='keywordRate']/dynamic-content/text()"));
-											mapping.keyword = document.valueOf("//dynamic-element[@name='keywordRate']/dynamic-content/text()");
-											mapping.description = document.valueOf("//dynamic-element[@name='descriptionLongRate']/dynamic-content/text()");
-											mapping.shortDescription = document.valueOf("//dynamic-element[@name='shortDescriptionRate']/dynamic-content/text()");
-											mapping.benefits = document.valueOf("//dynamic-element[@name='benefitsRate']/dynamic-content/text()");
-											mapping.restrictions = document.valueOf("//dynamic-element[@name='Restrictions1']/dynamic-content/text()");
-											mapping.currency = document.valueOf("//dynamic-element[@name='currencyRate']/dynamic-content/text()");
-											mapping.enddate = document.valueOf("//dynamic-element[@name='finalDateBooking']/dynamic-content/text()");
+											mapping.keyword = document.valueOf("//dynamic-element[@name='keywordRate']/dynamic-content[@language-id='"+locale+"']/text()");
+											mapping.description = document.valueOf("//dynamic-element[@name='descriptionLongRate']/dynamic-content[@language-id='"+locale+"']/text()");
+											mapping.shortDescription = document.valueOf("//dynamic-element[@name='shortDescriptionRate']/dynamic-content[@language-id='"+locale+"']/text()");
+											mapping.benefits = document.valueOf("//dynamic-element[@name='benefitsRate']/dynamic-content[@language-id='"+locale+"']/text()");
+											mapping.restrictions = document.valueOf("//dynamic-element[@name='Restrictions1']/dynamic-content[@language-id='"+locale+"']/text()");
+											mapping.currency = document.valueOf("//dynamic-element[@name='currencyRate']/dynamic-content[@language-id='"+locale+"']/text()");
+											mapping.enddate = document.valueOf("//dynamic-element[@name='finalDateBooking']/dynamic-content[@language-id='"+locale+"']/text()");
 											mapping.guid = journalArticle.getArticleId();
 											mapping.language = Constants.LENGUAJE;
 											List<Node> mediaNodes = document.selectNodes("//dynamic-element[@name='mediaLinksRate']/dynamic-element");
 											List<String> mediaArray = new ArrayList<String>();
 											for(Node node: mediaNodes){
-												String pie = node.valueOf("dynamic-element[@name='PieRate4']/dynamic-content/text()");
+												String pie = node.valueOf("dynamic-element[@name='PieRate4']/dynamic-content[@language-id='"+locale+"']/text()");
 												String link = node.valueOf("dynamic-content/text()");
-												String type_image = node.valueOf("dynamic-element[@name='TypeRate3']/dynamic-content/text()");
+												String type_image = node.valueOf("dynamic-element[@name='TypeRate3']/dynamic-content[@language-id='"+locale+"']/text()");
 												if(!link.trim().equals("")){
 													JSONObject object = JSONFactoryUtil.createJSONObject();
 													object.put("link", link);
@@ -336,25 +341,26 @@ private static final Log log = LogFactoryUtil.getLog(RateMapping.class);
 											mapping.mediaLinks = sanitizeArray(mediaArray);
 										}
 									}else{
+										
 										mapping = new RateMapping(); 
-										mapping.code = document.valueOf("//dynamic-element[@name='codeRate']/dynamic-content/text()");
-										mapping.name = document.valueOf("//dynamic-element[@name='nameRate']/dynamic-content/text()");
+										mapping.code = document.valueOf("//dynamic-element[@name='codeRate']/dynamic-content[@language-id='"+locale+"']/text()");
+										mapping.name = document.valueOf("//dynamic-element[@name='nameRate']/dynamic-content[@language-id='"+locale+"']/text()");
 										mapping.title = document.valueOf("//dynamic-element[@name='codeRate']/dynamic-content/text()").concat("-").concat(document.valueOf("//dynamic-element[@name='keywordRate']/dynamic-content/text()"));
-										mapping.keyword = document.valueOf("//dynamic-element[@name='keywordRate']/dynamic-content/text()");
-										mapping.description = document.valueOf("//dynamic-element[@name='descriptionLongRate']/dynamic-content/text()");
-										mapping.shortDescription = document.valueOf("//dynamic-element[@name='shortDescriptionRate']/dynamic-content/text()");
-										mapping.benefits = document.valueOf("//dynamic-element[@name='benefitsRate']/dynamic-content/text()");
-										mapping.restrictions = document.valueOf("//dynamic-element[@name='Restrictions1']/dynamic-content/text()");
-										mapping.currency = document.valueOf("//dynamic-element[@name='currencyRate']/dynamic-content/text()");
-										mapping.enddate = document.valueOf("//dynamic-element[@name='finalDateBooking']/dynamic-content/text()");
+										mapping.keyword = document.valueOf("//dynamic-element[@name='keywordRate']/dynamic-content[@language-id='"+locale+"']/text()");
+										mapping.description = document.valueOf("//dynamic-element[@name='descriptionLongRate']/dynamic-content[@language-id='"+locale+"']/text()");
+										mapping.shortDescription = document.valueOf("//dynamic-element[@name='shortDescriptionRate']/dynamic-content[@language-id='"+locale+"']/text()");
+										mapping.benefits = document.valueOf("//dynamic-element[@name='benefitsRate']/dynamic-content[@language-id='"+locale+"']/text()");
+										mapping.restrictions = document.valueOf("//dynamic-element[@name='Restrictions1']/dynamic-content[@language-id='"+locale+"']/text()");
+										mapping.currency = document.valueOf("//dynamic-element[@name='currencyRate']/dynamic-content[@language-id='"+locale+"']/text()");
+										mapping.enddate = document.valueOf("//dynamic-element[@name='finalDateBooking']/dynamic-content[@language-id='"+locale+"']/text()");
 										mapping.guid = journalArticle.getArticleId();
 										mapping.language = Constants.LENGUAJE;
 										List<Node> mediaNodes = document.selectNodes("//dynamic-element[@name='mediaLinksRate']/dynamic-element");
 										List<String> mediaArray = new ArrayList<String>();
 										for(Node node: mediaNodes){
-											String pie = node.valueOf("dynamic-element[@name='PieRate4']/dynamic-content/text()");
+											String pie = node.valueOf("dynamic-element[@name='PieRate4']/dynamic-content[@language-id='"+locale+"']/text()");
 											String link = node.valueOf("dynamic-content/text()");
-											String type_image = node.valueOf("dynamic-element[@name='TypeRate3']/dynamic-content/text()");
+											String type_image = node.valueOf("dynamic-element[@name='TypeRate3']/dynamic-content[@language-id='"+locale+"']/text()");
 											if(!link.trim().equals("")){
 												JSONObject object = JSONFactoryUtil.createJSONObject();
 												object.put("link", link);
@@ -367,9 +373,12 @@ private static final Log log = LogFactoryUtil.getLog(RateMapping.class);
 									}
 									rates.add(mapping);
 			}
+			long end = System.currentTimeMillis();
+			System.out.println("Termino de transformacion: "+ ((end - start) / 1000));
 		} catch (Exception e) {
 			log.error("module getWebContentRate: "+e);
 		}
+		
 		return rates;
 		
 	}
@@ -404,27 +413,27 @@ private static final Log log = LogFactoryUtil.getLog(RateMapping.class);
 								
 								Document document = null;
 								
-								document = SAXReaderUtil.read(journalArticle.getContentByLocale(locale));
+								document = SAXReaderUtil.read(journalArticle.getContent());
 								
 								mapping = new RateMapping(); 
-								mapping.code = document.valueOf("//dynamic-element[@name='codeRate']/dynamic-content/text()");
-								mapping.name = document.valueOf("//dynamic-element[@name='nameRate']/dynamic-content/text()");
-								mapping.title = document.valueOf("//dynamic-element[@name='codeRate']/dynamic-content/text()").concat("-").concat(document.valueOf("//dynamic-element[@name='keywordRate']/dynamic-content/text()"));
-								mapping.keyword = document.valueOf("//dynamic-element[@name='keywordRate']/dynamic-content/text()");
-								mapping.description = document.valueOf("//dynamic-element[@name='descriptionLongRate']/dynamic-content/text()");
-								mapping.shortDescription = document.valueOf("//dynamic-element[@name='shortDescriptionRate']/dynamic-content/text()");
-								mapping.benefits = document.valueOf("//dynamic-element[@name='benefitsRate']/dynamic-content/text()");
-								mapping.restrictions = document.valueOf("//dynamic-element[@name='Restrictions1']/dynamic-content/text()");
-								mapping.currency = document.valueOf("//dynamic-element[@name='currencyRate']/dynamic-content/text()");
-								mapping.enddate = document.valueOf("//dynamic-element[@name='finalDateBooking']/dynamic-content/text()");
+								mapping.code = document.valueOf("//dynamic-element[@name='codeRate']/dynamic-content[@language-id='"+locale+"']/text()");
+								mapping.name = document.valueOf("//dynamic-element[@name='nameRate']/dynamic-content[@language-id='"+locale+"']/text()");
+								mapping.title = document.valueOf("//dynamic-element[@name='codeRate']/dynamic-content[@language-id='"+locale+"']/text()").concat("-").concat(document.valueOf("//dynamic-element[@name='keywordRate']/dynamic-content[@language-id='"+locale+"']/text()"));
+								mapping.keyword = document.valueOf("//dynamic-element[@name='keywordRate']/dynamic-content[@language-id='"+locale+"']/text()");
+								mapping.description = document.valueOf("//dynamic-element[@name='descriptionLongRate']/dynamic-content[@language-id='"+locale+"']/text()");
+								mapping.shortDescription = document.valueOf("//dynamic-element[@name='shortDescriptionRate']/dynamic-content[@language-id='"+locale+"']/text()");
+								mapping.benefits = document.valueOf("//dynamic-element[@name='benefitsRate']/dynamic-content[@language-id='"+locale+"']/text()");
+								mapping.restrictions = document.valueOf("//dynamic-element[@name='Restrictions1']/dynamic-content[@language-id='"+locale+"']/text()");
+								mapping.currency = document.valueOf("//dynamic-element[@name='currencyRate']/dynamic-content[@language-id='"+locale+"']/text()");
+								mapping.enddate = document.valueOf("//dynamic-element[@name='finalDateBooking']/dynamic-content[@language-id='"+locale+"']/text()");
 								mapping.guid = journalArticle.getArticleId();
 								mapping.language = Constants.LENGUAJE;
 								List<Node> mediaNodes = document.selectNodes("//dynamic-element[@name='mediaLinksRate']/dynamic-element");
 								List<String> mediaArray = new ArrayList<String>();
 								for(Node node: mediaNodes){
-									String pie = node.valueOf("dynamic-element[@name='PieRate4']/dynamic-content/text()");
-									String link = node.valueOf("dynamic-content/text()");
-									String type_image = node.valueOf("dynamic-element[@name='TypeRate3']/dynamic-content/text()");
+									String pie = node.valueOf("dynamic-element[@name='PieRate4']/dynamic-content[@language-id='"+locale+"']/text()");
+									String link = node.valueOf("dynamic-content[@language-id='"+locale+"']/text()");
+									String type_image = node.valueOf("dynamic-element[@name='TypeRate3']/dynamic-content[@language-id='"+locale+"']/text()");
 									if(!link.trim().equals("")){
 										JSONObject object = JSONFactoryUtil.createJSONObject();
 										object.put("link", link);

@@ -147,19 +147,19 @@ private static final Log log = LogFactoryUtil.getLog(RoomMapping.class);
         this.articleTitle = content.getTitle(locale);
         Document docXML = null;
         try {
-            docXML = SAXReaderUtil.read(content.getContentByLocale(locale));
-            this.code = docXML.valueOf("//dynamic-element[@name='codeRoom']/dynamic-content/text()");
-            this.name = docXML.valueOf("//dynamic-element[@name='nameRoom']/dynamic-content/text()");
-            this.keywords = docXML.valueOf("//dynamic-element[@name='keywordsRoom']/dynamic-content/text()");
-            this.description= docXML.valueOf("//dynamic-element[@name='descriptionRoom']/dynamic-content/text()");
-            this.shortDescription=docXML.valueOf("//dynamic-element[@name='shortDescriptionRoom']/dynamic-content/text()");
+            docXML = SAXReaderUtil.read(content.getContent());
+            this.code = docXML.valueOf("//dynamic-element[@name='codeRoom']/dynamic-content[@language-id='"+locale+"']/text()");
+            this.name = docXML.valueOf("//dynamic-element[@name='nameRoom']/dynamic-content[@language-id='"+locale+"']/text()");
+            this.keywords = docXML.valueOf("//dynamic-element[@name='keywordsRoom']/dynamic-content[@language-id='"+locale+"']/text()");
+            this.description= docXML.valueOf("//dynamic-element[@name='descriptionRoom']/dynamic-content[@language-id='"+locale+"']/text()");
+            this.shortDescription=docXML.valueOf("//dynamic-element[@name='shortDescriptionRoom']/dynamic-content[@language-id='"+locale+"']/text()");
         
             List<Node> mediaNodes = docXML.selectNodes("//dynamic-element[@name='mediaLinksRoom']/dynamic-element");
 			List<String> mediaArray=new ArrayList<String>();
 			for(Node mediaNode : mediaNodes){				
-				String pie= mediaNode.valueOf("dynamic-element[@name='footer']/dynamic-content/text()");				
-				String link= mediaNode.valueOf("dynamic-content/text()");				
-				String type_image= mediaNode.valueOf("dynamic-element[@name='typeRoom']/dynamic-content/text()");						
+				String pie= mediaNode.valueOf("dynamic-element[@name='footer']/dynamic-content[@language-id='"+locale+"']/text()");				
+				String link= mediaNode.valueOf("dynamic-content[@language-id='"+locale+"']/text()");				
+				String type_image= mediaNode.valueOf("dynamic-element[@name='typeRoom']/dynamic-content[@language-id='"+locale+"']/text()");						
 				if(!link.trim().equals("")){
 					JSONObject object=JSONFactoryUtil.createJSONObject();
 					object.put("link", link);
