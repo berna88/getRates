@@ -1,15 +1,11 @@
 package com.consistent.services.liferay.portal;
 
-import java.util.List;
-
 import com.consistent.services.liferay.constants.Constants;
 import com.liferay.asset.kernel.model.AssetCategory;
 import com.liferay.asset.kernel.model.AssetVocabulary;
 import com.liferay.asset.kernel.service.AssetCategoryLocalServiceUtil;
 import com.liferay.asset.kernel.service.AssetVocabularyLocalServiceUtil;
-import com.liferay.journal.model.JournalFolder;
 import com.liferay.journal.model.impl.JournalFolderImpl;
-import com.liferay.journal.service.JournalArticleResourceLocalServiceUtil;
 import com.liferay.journal.service.JournalFolderLocalServiceUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
@@ -18,6 +14,8 @@ import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
+
+import java.util.List;
 
 public abstract class Portal {
 	private static final Log log = LogFactoryUtil.getLog(Portal.class);
