@@ -310,7 +310,7 @@ private static final Log log = LogFactoryUtil.getLog(RateMapping.class);
 								document = SAXReaderUtil.read(journalArticle.getContent());
 									
 									if(!Constants.CHECKINDATE.isEmpty()){
-										if(getIntervals(Constants.CHECKINDATE, Constants.CHECKOUTDATE, document.valueOf("//dynamic-element[@name='finalDateBooking']/dynamic-content/text()"))){
+										if(getIntervals(Constants.CHECKINDATE, Constants.CHECKOUTDATE, document.valueOf("//dynamic-element[@name='finalDateBooking']/dynamic-content[@language-id='"+locale+"']/text()"))){
 											mapping = new RateMapping(); 
 											mapping.code = document.valueOf("//dynamic-element[@name='codeRate']/dynamic-content[@language-id='"+locale+"']/text()");
 											mapping.name = document.valueOf("//dynamic-element[@name='nameRate']/dynamic-content[@language-id='"+locale+"']/text()");
